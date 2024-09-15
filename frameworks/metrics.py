@@ -4,6 +4,15 @@ import numpy as np
 import pandas as pd
 
 
+def accuracy_metric(accuracies: dict[str, list[float]]):
+    df = pd.DataFrame(accuracies)
+    df.columns = [col.replace("Framework", "") for col in df.columns]
+
+    accuracy = df.describe().loc["mean", :].to_frame(name="Accuracy")
+    accuracy = accuracy.round(3)
+    accuracy.sort_values(by="Accuracy", ascending=False, inplace=True)
+    return accuracy
+
 def reliability_metric(percent_successful: dict[str, list[float]]):
     df = pd.DataFrame(percent_successful)
     df.columns = [col.replace("Framework", "") for col in df.columns]

@@ -126,6 +126,14 @@ def generate_results(
     }
     logger.info(f"Latencies:\n{metrics.latency_metric(latencies, 95)}")
 
+    if task == "multilabel_classification":
+        # Accuracy
+        predictions = {
+            framework: [value["accuracy"] for value in value["metrics"]]
+            for framework, value in results.items()
+        }
+        logger.info(f"Accuracy:\n{metrics.accuracy_metric(predictions)}")
+
     # NER Micro Metrics
     if task == "ner":
         micro_metrics_df = metrics.ner_micro_metrics(results)

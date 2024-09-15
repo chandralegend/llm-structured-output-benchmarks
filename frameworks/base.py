@@ -50,12 +50,29 @@ def calculate_metrics(
         fp[entity] = 0
         fn[entity] = 0
 
-        true_values = set(y_true.get(entity, []))
-        pred_values = set(y_pred.get(entity, []))
+        true_values = y_true.get(entity)
+        true_values = set(true_values) if true_values else set()
+        pred_values = y_pred.get(entity)
+        pred_values = set(pred_values) if pred_values else set()
 
         tp[entity] += len(true_values & pred_values)
         fp[entity] += len(pred_values - true_values)
         fn[entity] += len(true_values - pred_values)
+
+    return {
+        "true_positives": tp,
+        "false_positives": fp,
+        "false_negatives": fn,
+    }
+
+def calculate_metrics_multilabel_classification(
+    y_true: list[str], y_pred: list[str]
+) -> dict[str, int]:
+    """Calculate the total True positives, False positives and False negatives for multilabel classification task."""
+
+    tp = len(set(y_true) & set(y_pred))
+    fp = len(set(y_pred) - set(y_true))
+    fn = len(set(y_true) - set(y_pred))
 
     return {
         "true_positives": tp,
@@ -89,7 +106,9 @@ def experiment(
                 )
 
             responses, latencies = [], []
-            for _ in tqdm(range(n_runs), leave=False):
+            failed_runs = 0
+            iterator = tqdm(range(n_runs), leave=False)
+            for _ in iterator:
 
                 try:
                     start_time = time.time()
@@ -104,7 +123,13 @@ def experiment(
                     responses.append(response)
                     latencies.append(end_time - start_time)
                 except:
-                    pass
+                    failed_runs += 1
+                    iterator.set_postfix(
+                        {
+                            "Failed Runs": failed_runs,
+                            "Success Rate": (n_runs - failed_runs) / n_runs,
+                        }
+                    )
 
             num_successful = len(responses)
             percent_successful = num_successful / n_runs

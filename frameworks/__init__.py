@@ -2,14 +2,15 @@ from typing import Any
 
 from frameworks.base import experiment
 from frameworks.fructose_framework import FructoseFramework
-from frameworks.instructor_framework import InstructorFramework
-from frameworks.llamaindex_framework import LlamaIndexFramework
-from frameworks.lm_format_enforcer_framework import LMFormatEnforcerFramework
-from frameworks.marvin_framework import MarvinFramework
-from frameworks.mirascope_framework import MirascopeFramework
-from frameworks.modelsmith_framework import ModelsmithFramework
-from frameworks.outlines_framework import OutlinesFramework
-from frameworks.vanilla_openai_framework import VanillaOpenAIFramework
+from frameworks.semantix_framework import SemantixFramework
+# from frameworks.instructor_framework import InstructorFramework
+# from frameworks.llamaindex_framework import LlamaIndexFramework
+# from frameworks.lm_format_enforcer_framework import LMFormatEnforcerFramework
+# from frameworks.marvin_framework import MarvinFramework
+# # from frameworks.mirascope_framework import MirascopeFramework
+# from frameworks.modelsmith_framework import ModelsmithFramework
+# from frameworks.outlines_framework import OutlinesFramework
+# from frameworks.vanilla_openai_framework import VanillaOpenAIFramework
 
 
 def factory(class_name: str, *args, **kwargs) -> Any:
