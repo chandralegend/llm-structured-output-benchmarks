@@ -97,24 +97,32 @@
 #       # sample_rows: 2
 
 SemantixFramework:
-- task: "multilabel_classification"
-  n_runs: 10
+# - task: "multilabel_classification"
+#   n_runs: 10
+#   init_kwargs:
+#     prompt: ""
+#     llm_model: "gpt-4o-mini"
+#     llm_model_family: "openai"
+#     retries: 0 # Semantix has no retry parameter
+#     source_data_pickle_path: "data/multilabel_classification.pkl"
+#     # sample_rows: 2
+# - task: "ner"
+#   n_runs: 10
+#   init_kwargs:
+#     prompt: ""
+#     llm_model: "gpt-4o-mini"
+#     llm_model_family: "openai"
+#     retries: 0 # Semantix has no retry parameter
+#     source_data_pickle_path: "data/ner.pkl"
+#     # sample_rows: 2
+- task: "synthetic_data_generation"
+  n_runs: 100
   init_kwargs:
     prompt: ""
     llm_model: "gpt-4o-mini"
     llm_model_family: "openai"
-    retries: 0 
-    source_data_pickle_path: "data/multilabel_classification.pkl"
-    # sample_rows: 2
-- task: "ner"
-  n_runs: 10
-  init_kwargs:
-    prompt: ""
-    llm_model: "gpt-4o-mini"
-    llm_model_family: "openai"
-    retries: 0
-    source_data_pickle_path: "data/ner.pkl"
-    # sample_rows: 2
+    retries: 0 # Semantix has no retry parameter
+
 
 # MarvinFramework:
 #   - task: "multilabel_classification"

@@ -47,8 +47,23 @@ NER.__doc__ = "The named entities present in the text"
 def extract_entities(text: str) -> Semantic[NER, "Named Entities"]:  # type: ignore
     '''Only use the given entities. Do not made up new entities.'''
 
-# print(extract_entities(text="The passport number is 1234567890 and the bank routing number is 123456789."))
-# exit()
+## Synthetic data generation task
+
+@dataclass
+class UserAddress:
+    street: str
+    city: str
+    six_digit_postal_code: int
+    country: str
+
+@dataclass
+class User:
+    name: str
+    age: int
+    address: UserAddress
+
+@enhance("Generate a random person's information. The name must be chosen at random. Make it something you wouldn't normally choose.", llm)
+def generate_user_data() -> Semantic[User, "Synthetic User Data"]: ... # type: ignore
 
 class SemantixFramework(BaseFramework):
     def __init__(self, *args, **kwargs) -> None:
@@ -64,8 +79,10 @@ class SemantixFramework(BaseFramework):
                 return classify(**kwargs)
             elif task == "ner":
                 return extract_entities(**kwargs)
+            elif task == "synthetic_data_generation":
+                return generate_user_data()
             else:
-                raise ValueError(f"{task} is not allowed. Allowed values are ['multilabel_classification', 'ner']")
+                raise ValueError(f"{task} is not allowed. Allowed values are ['multilabel_classification', 'ner', 'synthetic_data_generation']")
 
         predictions, percent_successful, metrics, latencies = run_experiment(task, **inputs)
 
