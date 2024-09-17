@@ -9,7 +9,7 @@ from semantix.llms import OpenAI
 from frameworks.base import BaseFramework, experiment
 from data_sources.data_models import pydantic_to_dataclass
 
-llm = OpenAI(max_tokens=2048)
+llm = OpenAI(model="gpt-4o-mini-2024-07-18", max_tokens=2048)
 
 ## Multilabel classification task
 
