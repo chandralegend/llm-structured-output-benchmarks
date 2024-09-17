@@ -1,9 +1,9 @@
 from typing import Any
 
 from frameworks.base import experiment
-from frameworks.fructose_framework import FructoseFramework
+# from frameworks.fructose_framework import FructoseFramework
 from frameworks.semantix_framework import SemantixFramework
-# from frameworks.instructor_framework import InstructorFramework
+from frameworks.instructor_framework import InstructorFramework
 # from frameworks.llamaindex_framework import LlamaIndexFramework
 # from frameworks.lm_format_enforcer_framework import LMFormatEnforcerFramework
 # from frameworks.marvin_framework import MarvinFramework
