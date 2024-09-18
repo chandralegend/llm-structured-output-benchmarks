@@ -7,6 +7,8 @@ from loguru import logger
 from data_sources.data_models import pydantic_to_dataclass
 from frameworks.base import BaseFramework, experiment
 
+from tenacity import retry, stop_after_attempt
+
 
 class FructoseFramework(BaseFramework):
     def __init__(self, *args, **kwargs) -> None:
@@ -29,6 +31,7 @@ class FructoseFramework(BaseFramework):
             )
 
         @experiment(n_runs=n_runs, expected_response=expected_response, task=task)
+        @retry(stop=stop_after_attempt(self.retries+1))
         @self.fructose_client
         def run_experiment(text: str) -> self.response_model: ...
 

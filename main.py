@@ -14,7 +14,7 @@ app = typer.Typer()
 
 
 @app.command()
-def run_benchmark(config_path: str = "config.yaml"):
+def run_benchmark(config_path: str = "config.yaml", dir: str = "results"):
     device = "cuda" if torch.cuda.is_available() else "cpu"
     logger.info(f"Using device: {device} for local models")
 
@@ -50,8 +50,8 @@ def run_benchmark(config_path: str = "config.yaml"):
                     else:
                         labels = row.labels
 
-                    # logger.info(f"Actual Text: {row.text}")
-                    # logger.info(f"Actual Labels: {labels}")
+                    logger.info(f"Actual Text: {row.text}")
+                    logger.info(f"Actual Labels: {labels}")
                     predictions, percent_successful, framework_metrics, latencies = (
                         framework_instance.run(
                             inputs={"text": row.text},
@@ -60,7 +60,9 @@ def run_benchmark(config_path: str = "config.yaml"):
                             task=task,
                         )
                     )
-                    # logger.info(f"Predicted Labels: {predictions}")
+                    logger.info(f"Predicted Labels: {predictions}")
+                    logger.info(f"Metrics: {framework_metrics}")
+                    exit()
                     run_results["metrics"].append(framework_metrics)
                     run_results["predictions"].append(predictions)
                     run_results["percent_successful"].append(percent_successful)
@@ -81,17 +83,21 @@ def run_benchmark(config_path: str = "config.yaml"):
 
             # logger.info(f"Results:\n{results}")
 
-            directory = f"results/{task}"
+            directory = f"{dir}/{task}"
             os.makedirs(directory, exist_ok=True)
 
             with open(f"{directory}/{config_key}.pkl", "wb") as file:
                 pickle.dump(results, file)
                 logger.info(f"Results saved to {directory}/{config_key}.pkl")
 
+    with open(f"{dir}/config.yaml", "w") as file:
+        yaml.dump(configs, file)
+        logger.info(f"Config saved to {dir}/config.yaml")
+
 
 @app.command()
 def generate_results(
-    results_data_path: str = "",
+    results_dir: str = "results",
     task: str = "multilabel_classification",
 ):
 
@@ -99,8 +105,7 @@ def generate_results(
     if task not in allowed_tasks:
         raise ValueError(f"{task} is not allowed. Allowed values are {allowed_tasks}")
     
-    if not results_data_path:
-        results_data_path = f"./results/{task}"
+    results_data_path = f"./{results_dir}/{task}"
 
     # Combine results from different frameworks
     results = {}
@@ -127,12 +132,7 @@ def generate_results(
     logger.info(f"Latencies:\n{metrics.latency_metric(latencies, 95)}")
 
     if task == "multilabel_classification":
-        # Accuracy
-        predictions = {
-            framework: [value["accuracy"] for value in value["metrics"]]
-            for framework, value in results.items()
-        }
-        logger.info(f"Accuracy:\n{metrics.accuracy_metric(predictions)}")
+        logger.info(f"Multilabel Classification Metrics:\n{metrics.multilabel_classification_metrics(results)}")
 
     # NER Micro Metrics
     if task == "ner":

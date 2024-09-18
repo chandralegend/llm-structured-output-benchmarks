@@ -4,14 +4,27 @@ import numpy as np
 import pandas as pd
 
 
-def accuracy_metric(accuracies: dict[str, list[float]]):
-    df = pd.DataFrame(accuracies)
-    df.columns = [col.replace("Framework", "") for col in df.columns]
+def multilabel_classification_metrics(results):
+    metrics = {
+            "framework": [],
+            "exact_output_acc": [],
+            "precision": [],
+            "recall": [],
+            "f1": [],
+            "accuracy": []
+        }
+    
+    for framework, values in results.items():
+        runs = values["metrics"]
+        metrics["framework"].append(framework.replace("Framework", ""))
+        metrics["exact_output_acc"].append(sum(run["exact_output"] for run in runs) / len(runs))
+        metrics["precision"].append(sum(run["precision"] for run in runs) / len(runs))
+        metrics["recall"].append(sum(run["recall"] for run in runs) / len(runs))
+        metrics["f1"].append(sum(run["f1"] for run in runs) / len(runs))
+        metrics["accuracy"].append(sum(run["accuracy"] for run in runs) / len(runs))
 
-    accuracy = df.describe().loc["mean", :].to_frame(name="Accuracy")
-    accuracy = accuracy.round(3)
-    accuracy.sort_values(by="Accuracy", ascending=False, inplace=True)
-    return accuracy
+    return pd.DataFrame(metrics)
+
 
 def reliability_metric(percent_successful: dict[str, list[float]]):
     df = pd.DataFrame(percent_successful)

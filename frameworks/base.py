@@ -15,7 +15,6 @@ from data_sources.data_models import (
     synthetic_data_generation_model,
 )
 
-
 def response_parsing(response: Any) -> Any:
     if isinstance(response, list):
         response = {
@@ -28,7 +27,7 @@ def response_parsing(response: Any) -> Any:
     return response
 
 
-def calculate_metrics(
+def calculate_ner_metrics(
     y_true: dict[str, list[str]], y_pred: dict[str, list[str]]
 ) -> tuple[
     dict[str, dict[str, float]],
@@ -65,20 +64,18 @@ def calculate_metrics(
         "false_negatives": fn,
     }
 
-def calculate_metrics_multilabel_classification(
-    y_true: list[str], y_pred: list[str]
-) -> dict[str, int]:
-    """Calculate the total True positives, False positives and False negatives for multilabel classification task."""
-
-    tp = len(set(y_true) & set(y_pred))
-    fp = len(set(y_pred) - set(y_true))
-    fn = len(set(y_true) - set(y_pred))
-
-    return {
-        "true_positives": tp,
-        "false_positives": fp,
-        "false_negatives": fn,
-    }
+def calculate_multilabel_classification_metrics(target, preds):
+    tp, fp, fn, tn = 0, 0, 0, 0
+    for pred in preds:
+        tp += len(target.intersection(pred))
+        fp += len(pred - target)
+        fn += len(target - pred)
+        tn += 48 - (tp + fp + fn)
+    p = tp / (tp + fp) if (tp + fp) != 0 else 0
+    r = tp / (tp + fn) if (tp + fn) != 0 else 0
+    f1 = 2 * (p * r) / (p + r) if (p + r) != 0 else 0
+    a = (tp + tn) / (tp + tn + fp + fn) if tn else 0
+    return {'precision': p, 'recall': r, 'f1': f1, 'accuracy': a}
 
 
 def experiment(
@@ -140,14 +137,14 @@ def experiment(
                 for response in responses:
                     if response == expected_response:
                         accurate += 1
-
                 framework_metrics = {
-                    "accuracy": accurate / num_successful if num_successful else 0
+                    "exact_output": accurate / num_successful if num_successful else 0,
+                    **calculate_multilabel_classification_metrics(expected_response, responses)
                 }
             elif task == "ner":
                 framework_metrics = []
                 for response in responses:
-                    framework_metrics.append(calculate_metrics(expected_response, response))
+                    framework_metrics.append(calculate_ner_metrics(expected_response, response))
 
             return (
                 responses,

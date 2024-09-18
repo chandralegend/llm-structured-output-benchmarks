@@ -30,7 +30,7 @@ multilabel_classes = ['lists_createoradd', 'calendar_query', 'email_sendemail', 
 Label = Enum("Label", {name: name for name in multilabel_classes})
 Label.__doc__ = "The labels for the multilabel classification task"
 
-@enhance("Classify the given text into multiple labels", llm)
+@enhance("Classify the given text into multiple labels", llm, retries=1)
 def classify(text: str) -> Semantic[list[Label], "Relevant Labels"]: ... # type: ignore
 
 ## Named Entity Recognition task
@@ -43,7 +43,7 @@ ner_entities = ['passport_number', 'bank_routing_number', 'account_pin', 'swift_
 NER = pydantic_to_dataclass(create_model("NER", **{name: (Optional[list[str]], None)  for name in ner_entities}))
 NER.__doc__ = "The named entities present in the text"
 
-@enhance("Extract named entities from the given text", llm)
+@enhance("Extract named entities from the given text", llm, retries=1)
 def extract_entities(text: str) -> Semantic[NER, "Named Entities"]:  # type: ignore
     '''Only use the given entities. Do not made up new entities.'''
 
@@ -62,7 +62,7 @@ class User:
     age: int
     address: UserAddress
 
-@enhance("Generate a random person's information. The name must be chosen at random. Make it something you wouldn't normally choose.", llm)
+@enhance("Generate a random person's information. The name must be chosen at random. Make it something you wouldn't normally choose.", llm, retries=1)
 def generate_user_data() -> Semantic[User, "Synthetic User Data"]: ... # type: ignore
 
 class SemantixFramework(BaseFramework):
