@@ -50,8 +50,8 @@ def run_benchmark(config_path: str = "config.yaml", dir: str = "results"):
                     else:
                         labels = row.labels
 
-                    logger.info(f"Actual Text: {row.text}")
-                    logger.info(f"Actual Labels: {labels}")
+                    # logger.info(f"Actual Text: {row.text}")
+                    # logger.info(f"Actual Labels: {labels}")
                     predictions, percent_successful, framework_metrics, latencies = (
                         framework_instance.run(
                             inputs={"text": row.text},
@@ -60,9 +60,9 @@ def run_benchmark(config_path: str = "config.yaml", dir: str = "results"):
                             task=task,
                         )
                     )
-                    logger.info(f"Predicted Labels: {predictions}")
-                    logger.info(f"Metrics: {framework_metrics}")
-                    exit()
+                    # logger.info(f"Predicted Labels: {predictions}")
+                    # logger.info(f"Metrics: {framework_metrics}")
+
                     run_results["metrics"].append(framework_metrics)
                     run_results["predictions"].append(predictions)
                     run_results["percent_successful"].append(percent_successful)
