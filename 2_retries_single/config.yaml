@@ -1,0 +1,139 @@
+FructoseFramework:
+- init_kwargs:
+    llm_model: gpt-4o-mini-2024-07-18
+    llm_model_family: openai
+    prompt: 'Classify the following text: {text}'
+    retries: 2
+    source_data_pickle_path: data/multilabel_classification.pkl
+  n_runs: 1
+  task: multilabel_classification
+- init_kwargs:
+    llm_model: gpt-4o-mini-2024-07-18
+    llm_model_family: openai
+    prompt: 'Extract and resolve a list of entities from the following text: {text}'
+    retries: 2
+    source_data_pickle_path: data/ner.pkl
+  n_runs: 1
+  task: ner
+LlamaIndexFramework:
+- init_kwargs:
+    llm_model: gpt-4o-mini-2024-07-18
+    llm_model_family: openai
+    prompt: 'Classify the following text: {text}'
+    retries: 2
+    source_data_pickle_path: data/multilabel_classification.pkl
+  n_runs: 1
+  task: multilabel_classification
+- init_kwargs:
+    llm_model: gpt-4o-mini-2024-07-18
+    llm_model_family: openai
+    prompt: 'Extract and resolve a list of entities from the following text: {text}'
+    retries: 2
+    source_data_pickle_path: data/ner.pkl
+  n_runs: 1
+  task: ner
+- init_kwargs:
+    llm_model: gpt-4o-mini-2024-07-18
+    llm_model_family: openai
+    prompt: Generate a random person's information. The name must be chosen at random.
+      Make it something you wouldn't normally choose.
+  n_runs: 10
+  task: synthetic_data_generation
+MarvinFramework:
+- init_kwargs:
+    llm_model: gpt-4o-mini-2024-07-18
+    llm_model_family: openai
+    prompt: 'Classify the following text: {text}'
+    retries: 2
+    source_data_pickle_path: data/multilabel_classification.pkl
+  n_runs: 1
+  task: multilabel_classification
+- init_kwargs:
+    llm_model: gpt-4o-mini-2024-07-18
+    llm_model_family: openai
+    prompt: 'Extract and resolve a list of entities from the following text: {text}'
+    retries: 2
+    source_data_pickle_path: data/ner.pkl
+  n_runs: 1
+  task: ner
+- init_kwargs:
+    llm_model: gpt-4o-mini-2024-07-18
+    llm_model_family: openai
+    prompt: Generate a random person's information. The name must be chosen at random.
+      Make it something you wouldn't normally choose.
+  n_runs: 10
+  task: synthetic_data_generation
+ModelsmithFramework:
+- init_kwargs:
+    llm_model: gpt-4o-mini-2024-07-18
+    llm_model_family: openai
+    prompt: 'Classify the following text: {text}'
+    retries: 2
+    source_data_pickle_path: data/multilabel_classification.pkl
+  n_runs: 1
+  task: multilabel_classification
+- init_kwargs:
+    llm_model: gpt-4o-mini-2024-07-18
+    llm_model_family: openai
+    prompt: 'Extract and resolve a list of entities from the following text: {text}'
+    retries: 2
+    source_data_pickle_path: data/ner.pkl
+  n_runs: 1
+  task: ner
+- init_kwargs:
+    llm_model: gpt-4o-mini-2024-07-18
+    llm_model_family: openai
+    prompt: Generate a random person's information. The name must be chosen at random.
+      Make it something you wouldn't normally choose.
+    retries: 2
+  n_runs: 10
+  task: synthetic_data_generation
+SemantixFramework:
+- init_kwargs:
+    llm_model: gpt-4o-mini-2024-07-18
+    llm_model_family: openai
+    prompt: ''
+    retries: 2
+    source_data_pickle_path: data/multilabel_classification.pkl
+  n_runs: 1
+  task: multilabel_classification
+- init_kwargs:
+    llm_model: gpt-4o-mini-2024-07-18
+    llm_model_family: openai
+    prompt: ''
+    retries: 2
+    source_data_pickle_path: data/ner.pkl
+  n_runs: 1
+  task: ner
+- init_kwargs:
+    llm_model: gpt-4o-mini-2024-07-18
+    llm_model_family: openai
+    prompt: ''
+    retries: 2
+  n_runs: 10
+  task: synthetic_data_generation
+VanillaOpenAIFramework:
+- init_kwargs:
+    llm_model: gpt-4o-mini-2024-07-18
+    llm_model_family: openai
+    prompt: 'Classify the following text: {text}'
+    retries: 2
+    source_data_pickle_path: data/multilabel_classification.pkl
+  n_runs: 1
+  task: multilabel_classification
+- init_kwargs:
+    llm_model: gpt-4o-mini-2024-07-18
+    llm_model_family: openai
+    prompt: 'Extract and resolve a list of entities from the following text: {text}'
+    retries: 2
+    source_data_pickle_path: data/ner.pkl
+  n_runs: 1
+  task: ner
+- init_kwargs:
+    llm_model: gpt-4o-mini-2024-07-18
+    llm_model_family: openai
+    prompt: Generate a random person's information. The name must be chosen at random.
+      Make it something you wouldn't normally choose.
+    retries: 2
+  n_runs: 10
+  task: synthetic_data_generation

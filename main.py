@@ -1,6 +1,13 @@
 import os
 import pickle
 
+os.environ["OTEL_EXPORTER_OTLP_HEADERS"] = "api_key=9d8628de382a4087584:9839ba7"
+os.environ["PHOENIX_CLIENT_HEADERS"] = "api_key=9d8628de382a4087584:9839ba7"
+os.environ["PHOENIX_COLLECTOR_ENDPOINT"] = "https://app.phoenix.arize.com"
+
+from phoenix.otel import register
+from openinference.instrumentation.openai import OpenAIInstrumentor
+
 import pandas as pd
 import torch
 import typer
@@ -12,9 +19,9 @@ from frameworks import factory, metrics
 
 app = typer.Typer()
 
-
 @app.command()
 def run_benchmark(config_path: str = "config.yaml", dir: str = "results"):
+
     device = "cuda" if torch.cuda.is_available() else "cpu"
     logger.info(f"Using device: {device} for local models")
 
@@ -29,10 +36,17 @@ def run_benchmark(config_path: str = "config.yaml", dir: str = "results"):
             n_runs = config["n_runs"]
             run_results = {
                 "predictions": [],
+                "expected": [],
                 "percent_successful": [],
                 "metrics": [],
                 "latencies": [],
             }
+
+            tracer_provider = register(
+                project_name=f"{config_key.replace('Framework', '').lower()}_{task}_retries={config['init_kwargs'].get('retries', 0)}_new_semantix_with_reasoning",
+                endpoint="https://app.phoenix.arize.com/v1/traces"
+            )
+            OpenAIInstrumentor().instrument(tracer_provider=tracer_provider)
 
             framework_instance = factory(
                 config_key, task=task, device=device, **config["init_kwargs"]
@@ -67,6 +81,7 @@ def run_benchmark(config_path: str = "config.yaml", dir: str = "results"):
                     run_results["predictions"].append(predictions)
                     run_results["percent_successful"].append(percent_successful)
                     run_results["latencies"].append(latencies)
+                    run_results["expected"].append(labels)
             else:
                 predictions, percent_successful, _, latencies = (
                     framework_instance.run(
@@ -82,6 +97,8 @@ def run_benchmark(config_path: str = "config.yaml", dir: str = "results"):
             results[config_key] = run_results
 
             # logger.info(f"Results:\n{results}")
+
+            OpenAIInstrumentor().uninstrument()
 
             directory = f"{dir}/{task}"
             os.makedirs(directory, exist_ok=True)

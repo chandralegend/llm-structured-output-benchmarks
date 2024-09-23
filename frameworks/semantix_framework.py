@@ -1,13 +1,11 @@
 from typing import Any, Optional
 from dataclasses import dataclass
-from pydantic import create_model
-from enum import Enum
 
-from semantix import Semantic, enhance
+from semantix import enhance
 from semantix.llms import OpenAI
+from semantix.utils import create_class, create_enum
 
 from frameworks.base import BaseFramework, experiment
-from data_sources.data_models import pydantic_to_dataclass
 
 llm = OpenAI(model="gpt-4o-mini-2024-07-18", max_tokens=2048)
 
@@ -27,11 +25,10 @@ multilabel_classes = ['lists_createoradd', 'calendar_query', 'email_sendemail', 
  'recommendation_events','alarm_remove','iot_coffee','music_dislikeness',
  'general_joke','social_query']
 
-Label = Enum("Label", {name: name for name in multilabel_classes})
-Label.__doc__ = "The labels for the multilabel classification task"
+Label = create_enum("Label", {name: name for name in multilabel_classes}, "Multilabel Classes")
 
-@enhance("Classify the given text into multiple labels", llm, retries=1)
-def classify(text: str) -> Semantic[list[Label], "Relevant Labels"]: ... # type: ignore
+@enhance("Classify the given text", llm, retries=2, method="Reason")
+def classify(text: str) -> list[Label]: ... # type: ignore
 
 ## Named Entity Recognition task
 
@@ -40,12 +37,10 @@ ner_entities = ['passport_number', 'bank_routing_number', 'account_pin', 'swift_
                 'street_address', 'company', 'local_latlng', 'time', 'employee_id', 'customer_id', 'date_of_birth', 
                 'ipv4', 'bban']
 
-NER = pydantic_to_dataclass(create_model("NER", **{name: (Optional[list[str]], None)  for name in ner_entities}))
-NER.__doc__ = "The named entities present in the text"
+NER = create_class("NER", {name: (Optional[list[str]], None)  for name in ner_entities}, "Named Entities present in the text")
 
-@enhance("Extract named entities from the given text", llm, retries=1)
-def extract_entities(text: str) -> Semantic[NER, "Named Entities"]:  # type: ignore
-    '''Only use the given entities. Do not made up new entities.'''
+@enhance("Extract named entities from the given text", llm, retries=2, method="Reason")
+def extract_entities(text: str) -> NER: ...  # type: ignore
 
 ## Synthetic data generation task
 
@@ -62,8 +57,8 @@ class User:
     age: int
     address: UserAddress
 
-@enhance("Generate a random person's information. The name must be chosen at random. Make it something you wouldn't normally choose.", llm, retries=1)
-def generate_user_data() -> Semantic[User, "Synthetic User Data"]: ... # type: ignore
+@enhance("Generate a random person's information. The name must be chosen at random. Make it something you wouldn't normally choose.", llm, retries=2, method="Reason")
+def generate_user_data() -> User: ... # type: ignore
 
 class SemantixFramework(BaseFramework):
     def __init__(self, *args, **kwargs) -> None:

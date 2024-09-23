@@ -1,0 +1,82 @@
+vscode@codespaces-0e9faf /w/llm-structured-output-benchmarks (main)> python -m main generate-results --results-dir 2_retries --task ner                (py310) 
+2024-09-21 09:44:10.402 | INFO     | __main__:generate_results:142 - Reliability:
+               Reliability
+Fructose             1.000
+VanillaOpenAI        1.000
+Instructor           0.999
+Modelsmith           0.997
+Semantix             0.994
+Marvin               0.960
+LlamaIndex           0.946
+2024-09-21 09:44:10.406 | INFO     | __main__:generate_results:149 - Latencies:
+               Latency_p95(s)
+Instructor              2.723
+Fructose                2.867
+Semantix                3.122
+VanillaOpenAI           3.217
+Marvin                  3.868
+LlamaIndex              5.170
+Modelsmith              5.396
+2024-09-21 09:44:10.414 | INFO     | __main__:generate_results:157 - NER Micro Metrics:
+       framework  micro_precision  micro_recall  micro_f1
+0         Marvin         0.801825      0.740964  0.770194
+1     Instructor         0.775807      0.771991  0.773894
+2       Fructose         0.799070      0.695376  0.743625
+3     Modelsmith         0.795120      0.642691  0.710826
+4     LlamaIndex         0.790943      0.316904  0.452504
+5       Semantix         0.763940      0.784821  0.774240
+6  VanillaOpenAI         0.751465      0.741040  0.746217
+vscode@codespaces-0e9faf /w/llm-structured-output-benchmarks (main)> python -m main generate-results --results-dir 2_retries --task synthetic_data_generation
+2024-09-21 09:45:23.449 | INFO     | __main__:generate_results:142 - Reliability:
+               Reliability
+Marvin                1.00
+Modelsmith            1.00
+Semantix              1.00
+VanillaOpenAI         1.00
+Instructor            0.98
+LlamaIndex            0.96
+2024-09-21 09:45:23.452 | INFO     | __main__:generate_results:149 - Latencies:
+               Latency_p95(s)
+LlamaIndex              1.280
+Semantix                1.452
+Marvin                  1.472
+Instructor              1.971
+Modelsmith              2.085
+VanillaOpenAI           3.129
+2024-09-21 09:45:23.454 | INFO     | __main__:generate_results:165 - Variety:
+               Variety
+VanillaOpenAI    0.900
+Modelsmith       0.840
+Semantix         0.790
+Instructor       0.776
+LlamaIndex       0.021
+Marvin           0.010
+vscode@codespaces-0e9faf /w/llm-structured-output-benchmarks (main)> python -m main generate-results --results-dir 2_retries                           (py310) 
+2024-09-21 09:46:27.638 | INFO     | __main__:generate_results:142 - Reliability:
+               Reliability
+Instructor           1.000
+Fructose             1.000
+Modelsmith           1.000
+LlamaIndex           1.000
+Semantix             1.000
+VanillaOpenAI        1.000
+Marvin               0.991
+2024-09-21 09:46:27.641 | INFO     | __main__:generate_results:149 - Latencies:
+               Latency_p95(s)
+Fructose                0.883
+Modelsmith              0.940
+LlamaIndex              1.077
+Semantix                1.115
+Marvin                  1.172
+Instructor              1.313
+VanillaOpenAI           1.325
+2024-09-21 09:46:27.647 | INFO     | __main__:generate_results:152 - Multilabel Classification Metrics:
+       framework  exact_output_acc  precision    recall        f1  accuracy
+0         Marvin             0.401   0.699821  0.752083  0.713508  0.954188
+1     Instructor             0.289   0.600253  0.789083  0.655049  0.941856
+2       Fructose             0.527   0.765266  0.773250  0.762222  0.962475
+3     Modelsmith             0.457   0.713085  0.729333  0.716507  0.955441
+4     LlamaIndex             0.413   0.669041  0.744750  0.682117  0.949297
+5       Semantix             0.395   0.669183  0.674167  0.663336  0.945713
+6  VanillaOpenAI             0.401   0.674791  0.790500  0.714213  0.947857
+vscode@codespaces-0e9faf /w/llm-structured-output-benchmarks (main)>                                                                                        (py310) 

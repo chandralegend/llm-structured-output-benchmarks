@@ -4,6 +4,8 @@ from openai import OpenAI
 
 from frameworks.base import BaseFramework, experiment
 
+from tenacity import retry, stop_after_attempt
+
 
 class VanillaOpenAIFramework(BaseFramework):
     def __init__(self, *args, **kwargs) -> None:
@@ -14,6 +16,7 @@ class VanillaOpenAIFramework(BaseFramework):
         self, task: str, n_runs: int, expected_response: Any = None, inputs: dict = {}
     ) -> tuple[list[Any], float, dict, list[list[float]]]:
         @experiment(n_runs=n_runs, expected_response=expected_response, task=task)
+        @retry(stop=stop_after_attempt(self.retries+1))
         def run_experiment(inputs):
             response = self.openai_client.beta.chat.completions.parse(
                 model=self.llm_model,

@@ -18,7 +18,7 @@ from data_sources.data_models import (
 def response_parsing(response: Any) -> Any:
     if isinstance(response, list):
         response = {
-            member.value if isinstance(member, Enum) else member for member in response
+            member.value if isinstance(member, Enum) else str(member) for member in response
         }
     elif is_dataclass(response):
         response = asdict(response)
@@ -127,6 +127,7 @@ def experiment(
                             "Success Rate": (n_runs - failed_runs) / n_runs,
                         }
                     )
+                    logger.info(kwargs.get("text"))
 
             num_successful = len(responses)
             percent_successful = num_successful / n_runs
