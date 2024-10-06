@@ -43,7 +43,7 @@ def run_benchmark(config_path: str = "config.yaml", dir: str = "results"):
             }
 
             tracer_provider = register(
-                project_name=f"{config_key.replace('Framework', '').lower()}_{task}_retries={config['init_kwargs'].get('retries', 0)}_new_semantix_with_reasoning",
+                project_name=f"{config_key.replace('Framework', '').lower()}_{task}_retries={config['init_kwargs'].get('retries', 0)}_new_semantix",
                 endpoint="https://app.phoenix.arize.com/v1/traces"
             )
             OpenAIInstrumentor().instrument(tracer_provider=tracer_provider)

@@ -27,7 +27,7 @@ multilabel_classes = ['lists_createoradd', 'calendar_query', 'email_sendemail', 
 
 Label = create_enum("Label", {name: name for name in multilabel_classes}, "Multilabel Classes")
 
-@enhance("Classify the given text", llm, retries=2, method="Reason")
+@enhance("", llm, retries=2)
 def classify(text: str) -> list[Label]: ... # type: ignore
 
 ## Named Entity Recognition task
@@ -39,7 +39,7 @@ ner_entities = ['passport_number', 'bank_routing_number', 'account_pin', 'swift_
 
 NER = create_class("NER", {name: (Optional[list[str]], None)  for name in ner_entities}, "Named Entities present in the text")
 
-@enhance("Extract named entities from the given text", llm, retries=2, method="Reason")
+@enhance("", llm, retries=2)
 def extract_entities(text: str) -> NER: ...  # type: ignore
 
 ## Synthetic data generation task
@@ -57,7 +57,7 @@ class User:
     age: int
     address: UserAddress
 
-@enhance("Generate a random person's information. The name must be chosen at random. Make it something you wouldn't normally choose.", llm, retries=2, method="Reason")
+@enhance("Generate a random person's information. The name must be chosen at random. Make it something you wouldn't normally choose.", llm, retries=2)
 def generate_user_data() -> User: ... # type: ignore
 
 class SemantixFramework(BaseFramework):

@@ -5,7 +5,7 @@ SemantixFramework:
     prompt: "" # No prompt needed for Semantix
     llm_model: "gpt-4o-mini-2024-07-18"
     llm_model_family: "openai"
-    retries: 0
+    retries: 2
     source_data_pickle_path: "data/multilabel_classification.pkl"
 - task: "ner"
   n_runs: 1
@@ -13,7 +13,7 @@ SemantixFramework:
     prompt: "" # No prompt needed for Semantix
     llm_model: "gpt-4o-mini-2024-07-18"
     llm_model_family: "openai"
-    retries: 0
+    retries: 2
     source_data_pickle_path: "data/ner.pkl"
 - task: "synthetic_data_generation"
   n_runs: 10
@@ -21,7 +21,7 @@ SemantixFramework:
     prompt: "" # No prompt needed for Semantix
     llm_model: "gpt-4o-mini-2024-07-18"
     llm_model_family: "openai"
-    retries: 0
+    retries: 2
 
 # VanillaOpenAIFramework:
 #   - task: "multilabel_classification"
